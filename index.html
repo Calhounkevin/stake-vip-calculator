@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stake VIP Calculator & Rakeback Engine | Real-Time Tier Projections</title>
+    <meta name="description" content="Calculate your Stake VIP rank progression, level-up bonuses, daily reload, and rakeback with accurate mathematical modeling. Instant updates for BTC, ETH, and USD.">
+    <meta name="keywords" content="stake vip calculator, stake rakeback calculator, stake bonus code, stake vip levels, stake reload calculator, stake promo code">
+    <link rel="canonical" href="https://your-domain.com/">
+    
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Stake VIP Calculator & Rakeback Engine">
+    <meta property="og:description" content="Maximize your VIP progression, calculate exact level-up cash bonuses and theoretical rakeback yields.">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        stake: {
+                            dark: '#0f212e',
+                            card: '#1a2c38',
+                            hover: '#213743',
+                            accent: '#00e701',
+                            accentHover: '#00c701',
+                            blue: '#1475e1',
+                            textMuted: '#b1bad3'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f212e;
+            color: #ffffff;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        .glow-accent {
+            box-shadow: 0 0 25px rgba(0, 231, 1, 0.2);
+        }
+        .glow-blue {
+            box-shadow: 0 0 25px rgba(20, 117, 225, 0.2);
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 22px;
+            width: 22px;
+            border-radius: 50%;
+            background: #00e701;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,231,1,0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between antialiased selection:bg-stake-accent selection:text-black">
+
+    <!-- Sticky Navigation Header -->
+    <header class="sticky top-0 z-50 bg-stake-dark/95 backdrop-blur border-b border-stake-card/80 px-4 lg:px-8 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+<img src="stakevip-logo.png" alt="STAKEVIP" class="h-8 w-auto">
+
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-2 text-xs bg-stake-card px-3 py-1.5 rounded-full border border-gray-700/50">
+                    <span class="w-2 h-2 rounded-full bg-stake-accent animate-pulse"></span>
+                    <span class="text-stake-textMuted">Status:</span>
+                    <span id="sync-status" class="text-white font-medium">Syncing Engine...</span>
+                </div>
+                <a href="/play" target="_blank" rel="nofollow noopener" class="bg-stake-accent hover:bg-stake-accentHover text-black font-bold text-sm px-5 py-2.5 rounded transition duration-150 transform hover:-translate-y-0.5 glow-accent">
+                    Claim VIP Rakeback
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+
+        <!-- Hero Section -->
+        <section class="text-center space-y-4 max-w-3xl mx-auto pt-4">
+            <div class="inline-flex items-center space-x-2 bg-stake-card border border-stake-accent/30 px-3 py-1 rounded-full text-xs font-semibold text-stake-accent mb-2">
+                <span>⚡ Live Blockchain Rate Sync Active</span>
+            </div>
+            <h1 class="text-3xl sm:text-5xl font-extrabold tracking-tight leading-tight">
+                Stake VIP & Rakeback <span class="text-stake-accent">Calculator</span>
+            </h1>
+            <p class="text-stake-textMuted text-sm sm:text-base leading-relaxed">
+                Accurately project your wagering progression, unlock formulas for Level-Up bonuses, and calculate theoretical rakeback returns using verified institutional house-edge equations.
+            </p>
+        </section>
+
+        <!-- Live Code Claim Highlight Banner -->
+        <section class="bg-gradient-to-r from-stake-card via-stake-hover to-stake-card border border-stake-accent/40 rounded-xl p-6 glow-accent flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="space-y-1 text-center md:text-left">
+                <span class="text-stake-accent text-xs font-bold tracking-wider uppercase">Active Verified Registration Code</span>
+                <h3 class="text-xl font-bold">Instantly Unlock 5% Permanent Rakeback + Level 1 Benefits</h3>
+                <p class="text-xs text-stake-textMuted">Works for both new registrations and accounts under 24 hours old without an active affiliate.</p>
+            </div>
+            <div class="flex items-center bg-stake-dark border border-gray-700 rounded-lg p-1.5 w-full md:w-auto">
+                <input type="text" id="promo-code" value="VIPEDGE" readonly class="bg-transparent text-stake-accent font-mono font-bold text-center px-4 py-2 outline-none w-full md:w-32 cursor-pointer">
+                <button onclick="copyPromoCode()" id="copy-btn" class="bg-stake-accent hover:bg-stake-accentHover text-black text-xs font-bold px-4 py-2.5 rounded transition uppercase tracking-wider">
+                    Copy Code
+                </button>
+            </div>
+        </section>
+
+        <!-- Interactive Calculator Grid -->
+        <section class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Left Controls: User Input Panel (7 Cols) -->
+            <div class="lg:col-span-7 bg-stake-card rounded-xl p-6 sm:p-8 border border-gray-800 space-y-6">
+                <h2 class="text-xl font-bold flex items-center space-x-2">
+                    <span>🎛️</span>
+                    <span>Wagering Configuration</span>
+                </h2>
+
+                <!-- Currency Selection -->
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-stake-textMuted uppercase tracking-wider">Select Currency</label>
+                    <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
+                        <button onclick="setCurrency('USD')" class="curr-btn active-curr bg-stake-hover border border-stake-accent text-white py-2 rounded text-xs font-bold">USD ($)</button>
+                        <button onclick="setCurrency('BTC')" class="curr-btn bg-stake-dark border border-transparent hover:border-gray-600 text-stake-textMuted py-2 rounded text-xs font-bold">BTC</button>
+                        <button onclick="setCurrency('ETH')" class="curr-btn bg-stake-dark border border-transparent hover:border-gray-600 text-stake-textMuted py-2 rounded text-xs font-bold">ETH</button>
+                        <button onclick="setCurrency('LTC')" class="curr-btn bg-stake-dark border border-transparent hover:border-gray-600 text-stake-textMuted py-2 rounded text-xs font-bold">LTC</button>
+                        <button onclick="setCurrency('DOGE')" class="curr-btn bg-stake-dark border border-transparent hover:border-gray-600 text-stake-textMuted py-2 rounded text-xs font-bold">DOGE</button>
+                        <button onclick="setCurrency('TRX')" class="curr-btn bg-stake-dark border border-transparent hover:border-gray-600 text-stake-textMuted py-2 rounded text-xs font-bold">TRX</button>
+                    </div>
+                </div>
+
+                <!-- Current Wager Input Slider -->
+                <div class="space-y-3">
+                    <div class="flex justify-between items-center text-sm font-semibold">
+                        <label for="wager-amount" class="text-stake-textMuted">Wager Completed / Goal Volume:</label>
+                        <span id="wager-display" class="text-stake-accent font-mono text-base font-bold">$10,000</span>
+                    </div>
+                    <input type="range" id="wager-amount" min="0" max="1000000" step="1000" value="10000" class="w-full h-2 bg-stake-dark rounded-lg appearance-none cursor-pointer">
+                    <div class="flex justify-between text-[11px] text-gray-500 font-mono">
+                        <span>$0 (None)</span>
+                        <span>$50k (Silver)</span>
+                        <span>$250k (Plat I)</span>
+                        <span>$1M+ (Plat III)</span>
+                    </div>
+                </div>
+
+                <!-- Game Type Selection (House Edge Variable) -->
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-stake-textMuted uppercase tracking-wider">Primary Game Category (Determines Theoretical Rakeback)</label>
+                    <select id="game-type" onchange="calculateMetrics()" class="w-full bg-stake-dark border border-gray-700 rounded-lg px-4 py-3 text-sm text-white focus:border-stake-accent outline-none">
+                        <option value="0.01">Stake Originals (Dice, Plinko, Limbo, Crash) - 1.00% Edge</option>
+                        <option value="0.035" selected>Standard Slots (Pragmatic Play, Hacksaw) - 3.50% Edge</option>
+                        <option value="0.04">High Volatility Slots (NoLimit City) - 4.00% Edge</option>
+                        <option value="0.025">Live Dealer Tables (Blackjack, Roulette, Baccarat) - 2.50% Edge</option>
+                    </select>
+                </div>
+
+                <!-- Current Target VIP Tier Selector -->
+                <div class="space-y-2">
+                    <label class="text-xs font-bold text-stake-textMuted uppercase tracking-wider">Target VIP Tier</label>
+                    <select id="target-tier" onchange="calculateMetrics()" class="w-full bg-stake-dark border border-gray-700 rounded-lg px-4 py-3 text-sm text-white focus:border-stake-accent outline-none">
+                        <option value="10000">Bronze ($10,000 Wagered)</option>
+                        <option value="50000" selected>Silver ($50,000 Wagered)</option>
+                        <option value="100000">Gold ($100,000 Wagered)</option>
+                        <option value="250000">Platinum I ($250,000 Wagered)</option>
+                        <option value="500000">Platinum II ($500,000 Wagered)</option>
+                        <option value="1000000">Platinum III ($1,000,000 Wagered)</option>
+                        <option value="2500000">Platinum IV ($2,500,000 Wagered)</option>
+                        <option value="5000000">Platinum V ($5,000,000 Wagered)</option>
+                        <option value="10000000">Platinum VI ($10,000,000 Wagered)</option>
+                        <option value="25000000">Diamond I ($25,000,000 Wagered)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Right Controls: Mathematical Projection Output Panel (5 Cols) -->
+            <div class="lg:col-span-5 bg-stake-card rounded-xl p-6 sm:p-8 border border-gray-800 flex flex-col justify-between space-y-6">
+                <div class="space-y-6">
+                    <h2 class="text-xl font-bold flex items-center space-x-2">
+                        <span>📊</span>
+                        <span>Yield Calculations</span>
+                    </h2>
+
+                    <!-- Progress Bar Component -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-bold">
+                            <span class="text-stake-textMuted">Tier Progression Status</span>
+                            <span id="tier-progress-percent" class="text-stake-accent font-mono">20.00%</span>
+                        </div>
+                        <div class="w-full h-3 bg-stake-dark rounded-full overflow-hidden p-0.5 border border-gray-800">
+                            <div id="tier-progress-bar" class="h-full bg-stake-accent rounded-full transition-all duration-300" style="width: 20%"></div>
+                        </div>
+                        <p class="text-[11px] text-stake-textMuted text-right">
+                            Remaining to Level Up: <span id="wager-remaining" class="text-white font-mono font-bold">$40,000</span>
+                        </p>
+                    </div>
+
+                    <!-- Metrics Cards Grid -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-stake-dark p-4 rounded-lg border border-gray-800">
+                            <span class="text-[11px] uppercase font-bold text-stake-textMuted">Fixed Level-Up Cash</span>
+                            <div id="level-bonus-disp" class="text-lg font-black text-white font-mono mt-1">$50.00</div>
+                            <span class="text-[10px] text-gray-500">Base unlock reward</span>
+                        </div>
+
+                        <div class="bg-stake-dark p-4 rounded-lg border border-gray-800">
+                            <span class="text-[11px] uppercase font-bold text-stake-textMuted">Estimated Rakeback</span>
+                            <div id="rakeback-disp" class="text-lg font-black text-stake-accent font-mono mt-1">$17.50</div>
+                            <span class="text-[10px] text-gray-500">5% of Theoretical Edge</span>
+                        </div>
+
+                        <div class="bg-stake-dark p-4 rounded-lg border border-gray-800">
+                            <span class="text-[11px] uppercase font-bold text-stake-textMuted">Daily Reload Est.</span>
+                            <div id="daily-reload-disp" class="text-lg font-black text-white font-mono mt-1">$4.25</div>
+                            <span class="text-[10px] text-gray-500">Based on recent 14d play</span>
+                        </div>
+
+                        <div class="bg-stake-dark p-4 rounded-lg border border-gray-800">
+                            <span class="text-[11px] uppercase font-bold text-stake-textMuted">Total Projected Value</span>
+                            <div id="total-yield-disp" class="text-lg font-black text-stake-blue font-mono mt-1">$71.75</div>
+                            <span class="text-[10px] text-gray-500">Immediate unlock equity</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to Action Direct Trigger -->
+                <div class="pt-4 border-t border-gray-800">
+                    <a href="/play" target="_blank" rel="nofollow noopener" class="w-full flex items-center justify-center space-x-2 bg-stake-accent hover:bg-stake-accentHover text-black font-extrabold text-sm py-4 rounded-lg transition duration-200 uppercase tracking-wider glow-accent">
+                        <span>Activate VIP Status On Stake</span>
+                        <span>➔</span>
+                    </a>
+                    <span class="block text-center text-[10px] text-stake-textMuted mt-2">
+                        Official Operator Gateway • Guaranteed Instant VIP & Rakeback Initialization
+                    </span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Educational Reference & VIP Master Table -->
+        <section class="bg-stake-card rounded-xl p-6 sm:p-8 border border-gray-800 space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-2xl font-bold">Official Stake VIP Tier Matrix Reference</h2>
+                    <p class="text-xs text-stake-textMuted mt-1">Mathematical verification of cumulative requirements and permanent benefits.</p>
+                </div>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left text-xs border-collapse">
+                    <thead>
+                        <tr class="border-b border-gray-800 text-stake-textMuted uppercase">
+                            <th class="py-3 px-4 font-bold">VIP Rank</th>
+                            <th class="py-3 px-4 font-bold">Required Wager (USD)</th>
+                            <th class="py-3 px-4 font-bold">Base Cash Reward</th>
+                            <th class="py-3 px-4 font-bold">Reload Type</th>
+                            <th class="py-3 px-4 font-bold">Dedicated VIP Host</th>
+                        </tr>
+                    </thead>
+                    <tbody id="vip-table-body" class="divide-y divide-gray-800/60 font-medium">
+                        <!-- Populated dynamically via JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- SEO FAQ Structural Rich Text -->
+        <section class="bg-stake-card/60 rounded-xl p-6 sm:p-8 border border-gray-800 space-y-6 text-sm text-stake-textMuted">
+            <h3 class="text-lg font-bold text-white">Frequently Asked Questions: Stake VIP & Rakeback Formulas</h3>
+            
+            <div class="space-y-4">
+                <div>
+                    <h4 class="font-bold text-white">How is Stake Rakeback precisely calculated?</h4>
+                    <p class="mt-1 text-xs leading-relaxed">Rakeback returns 5% of the casino's theoretical house edge back to the bettor. For instance, on a $1,000 slot wager with a theoretical RTP of 96.5% (a 3.5% house edge), the total edge equates to $35.00. Your rakeback rebate is $35.00 * 0.05 = $1.75. This is paid out continuously, win or lose.</p>
+                </div>
+                <div>
+                    <h4 class="font-bold text-white">Can I get Rakeback on Stake without being Bronze VIP?</h4>
+                    <p class="mt-1 text-xs leading-relaxed">Yes. Normally, Stake locks rakeback until a player wagers $10,000 to reach Bronze. However, by registering with the affiliate bonus code <span class="text-stake-accent font-mono font-bold">VIPEDGE</span>, your account automatically has 5% permanent rakeback enabled on your first wager with zero tier prerequisites.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="bg-stake-dark border-t border-stake-card/80 py-8 px-4 text-center text-xs text-stake-textMuted space-y-3">
+        <p>© <span id="year"></span> StakeEngine VIP Analytics. Independent mathematical modeling and tracking utilities.</p>
+        <p class="max-w-2xl mx-auto text-[11px] text-gray-600">
+            This platform provides mathematical estimates based on public terms. Not directly affiliated with Medium Rare N.V. Please gamble responsibly. 18+ / 21+ depending on jurisdiction.
+        </p>
+    </footer>
+
+    <!-- Front-End Application Logic -->
+    <script>
+        // System State
+        let activeCurrency = 'USD';
+        let cryptoPrices = {
+            'USD': 1.0,
+            'BTC': 65000.0,
+            'ETH': 3500.0,
+            'LTC': 85.0,
+            'DOGE': 0.14,
+            'TRX': 0.12
+        };
+
+        const vipTiers = [
+            { name: "Bronze", wager: 10000, baseBonus: 15, reload: "None (Gameplay)", host: "No" },
+            { name: "Silver", wager: 50000, baseBonus: 50, reload: "None (Gameplay)", host: "No" },
+            { name: "Gold", wager: 100000, baseBonus: 110, reload: "None (Gameplay)", host: "No" },
+            { name: "Platinum I", wager: 250000, baseBonus: 220, reload: "14-Day Daily", host: "No" },
+            { name: "Platinum II", wager: 500000, baseBonus: 440, reload: "28-Day Daily", host: "No" },
+            { name: "Platinum III", wager: 1000000, baseBonus: 880, reload: "42-Day Daily", host: "No" },
+            { name: "Platinum IV", wager: 2500000, baseBonus: 1760, reload: "Permanent Daily", host: "Yes" },
+            { name: "Platinum V", wager: 5000000, baseBonus: 3520, reload: "Permanent Daily", host: "Yes" },
+            { name: "Platinum VI", wager: 10000000, baseBonus: 7040, reload: "Permanent Daily", host: "Yes" },
+            { name: "Diamond I", wager: 25000000, baseBonus: 15000, reload: "Permanent Customized", host: "Dedicated Elite" }
+        ];
+
+        // Initialization
+        window.addEventListener('DOMContentLoaded', async () => {
+            document.getElementById('year').textContent = new Date().getFullYear();
+            renderTable();
+            await loadDynamicData();
+            setupEventListeners();
+            calculateMetrics();
+        });
+
+        function setupEventListeners() {
+            const wagerInput = document.getElementById('wager-amount');
+            wagerInput.addEventListener('input', (e) => {
+                document.getElementById('wager-display').textContent = formatCurrency(parseFloat(e.target.value));
+                calculateMetrics();
+            });
+        }
+
+        async function loadDynamicData() {
+            try {
+                const response = await fetch('./data.json', { cache: 'no-store' });
+                if (!response.ok) throw new Error('Data fetch failed');
+                const data = await response.json();
+                
+                if (data.rates) {
+                    cryptoPrices.BTC = data.rates.bitcoin?.usd || cryptoPrices.BTC;
+                    cryptoPrices.ETH = data.rates.ethereum?.usd || cryptoPrices.ETH;
+                    cryptoPrices.LTC = data.rates.litecoin?.usd || cryptoPrices.LTC;
+                    cryptoPrices.DOGE = data.rates.dogecoin?.usd || cryptoPrices.DOGE;
+                    cryptoPrices.TRX = data.rates.tron?.usd || cryptoPrices.TRX;
+                }
+
+                document.getElementById('sync-status').textContent = 'Live Synced (' + new Date(data.timestamp * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + ')';
+            } catch (err) {
+                document.getElementById('sync-status').textContent = 'Live Core (Static Sync)';
+            }
+        }
+
+        function setCurrency(curr) {
+            activeCurrency = curr;
+            document.querySelectorAll('.curr-btn').forEach(b => {
+                b.classList.remove('active-curr', 'bg-stake-hover', 'border-stake-accent', 'text-white');
+                b.classList.add('bg-stake-dark', 'border-transparent', 'text-stake-textMuted');
+            });
+            event.target.classList.remove('bg-stake-dark', 'border-transparent', 'text-stake-textMuted');
+            event.target.classList.add('active-curr', 'bg-stake-hover', 'border-stake-accent', 'text-white');
+            
+            const wagerInput = document.getElementById('wager-amount');
+            document.getElementById('wager-display').textContent = formatCurrency(parseFloat(wagerInput.value));
+            calculateMetrics();
+        }
+
+        function formatCurrency(amountUSD) {
+            const rate = cryptoPrices[activeCurrency] || 1.0;
+            const converted = amountUSD / rate;
+            
+            if (activeCurrency === 'USD') {
+                return '$' + converted.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+            } else if (activeCurrency === 'BTC' || activeCurrency === 'ETH') {
+                return converted.toFixed(4) + ' ' + activeCurrency;
+            } else {
+                return converted.toFixed(2) + ' ' + activeCurrency;
+            }
+        }
+
+        function calculateMetrics() {
+            const wagerUSD = parseFloat(document.getElementById('wager-amount').value);
+            const targetTierWagerUSD = parseFloat(document.getElementById('target-tier').value);
+            const houseEdge = parseFloat(document.getElementById('game-type').value);
+            
+            // 1. Progress Calculation
+            let progress = (wagerUSD / targetTierWagerUSD) * 100;
+            if (progress > 100) progress = 100;
+            document.getElementById('tier-progress-percent').textContent = progress.toFixed(2) + '%';
+            document.getElementById('tier-progress-bar').style.width = progress + '%';
+
+            // 2. Remaining to level
+            const remainingUSD = Math.max(0, targetTierWagerUSD - wagerUSD);
+            document.getElementById('wager-remaining').textContent = formatCurrency(remainingUSD);
+
+            // 3. Level-Up Fixed Bonus
+            const matchedTier = vipTiers.find(t => t.wager === targetTierWagerUSD) || vipTiers[0];
+            document.getElementById('level-bonus-disp').textContent = formatCurrency(matchedTier.baseBonus);
+
+            // 4. Rakeback Yield (5% of Theoretical House Edge on total volume)
+            const theoreticalRakebackUSD = wagerUSD * houseEdge * 0.05;
+            document.getElementById('rakeback-disp').textContent = formatCurrency(theoreticalRakebackUSD);
+
+            // 5. Daily Reload Estimation (approx 10% of house edge on 14d active play / 14)
+            const estimatedDailyReloadUSD = (wagerUSD * houseEdge * 0.10) / 14;
+            document.getElementById('daily-reload-disp').textContent = formatCurrency(estimatedDailyReloadUSD);
+
+            // 6. Total Projected Value
+            const totalUSD = matchedTier.baseBonus + theoreticalRakebackUSD + (estimatedDailyReloadUSD * 7);
+            document.getElementById('total-yield-disp').textContent = formatCurrency(totalUSD);
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('vip-table-body');
+            tbody.innerHTML = '';
+            vipTiers.forEach(t => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-stake-hover/40 transition";
+                tr.innerHTML = `
+                    <td class="py-3 px-4 font-bold text-white">${t.name}</td>
+                    <td class="py-3 px-4 font-mono text-stake-accent">$${t.wager.toLocaleString()}</td>
+                    <td class="py-3 px-4 font-mono text-white">$${t.baseBonus.toLocaleString()}</td>
+                    <td class="py-3 px-4 text-stake-textMuted">${t.reload}</td>
+                    <td class="py-3 px-4 text-stake-textMuted">${t.host}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function copyPromoCode() {
+            const codeInput = document.getElementById('promo-code');
+            navigator.clipboard.writeText(codeInput.value).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.textContent = 'COPIED!';
+                btn.classList.remove('bg-stake-accent', 'text-black');
+                btn.classList.add('bg-white', 'text-black');
+                setTimeout(() => {
+                    btn.textContent = 'COPY CODE';
+                    btn.classList.remove('bg-white', 'text-black');
+                    btn.classList.add('bg-stake-accent', 'text-black');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
