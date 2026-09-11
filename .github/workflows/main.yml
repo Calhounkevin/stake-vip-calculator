@@ -1,0 +1,53 @@
+name: StakeEngine Continuous Data Sync
+
+on:
+  schedule:
+    # Executes automatically every 6 hours (00:00, 06:00, 12:00, 18:00 UTC)
+    - cron: '0 */6 * * *'
+  workflow_dispatch: # Allows 1-click manual trigger from GitHub Web UI
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 1
+
+      - name: Set Up Python 3.11 Runtime
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Hardened Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install httpx
+
+      - name: Execute Autonomous Ingestion Pipeline
+        env:
+          SITE_HOST: ${{ secrets.SITE_HOST }}
+          INDEXNOW_KEY: ${{ secrets.INDEXNOW_KEY }}
+        run: |
+          python main.py
+
+      - name: Commit and Push Updated State
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Actions Autonomous Agent"
+          git add data.json
+          
+          # Check if data.json was actually modified to prevent empty commit failures
+          if git diff --staged --quiet; then
+            echo "No changes detected in dynamic cache. Skipping commit."
+          else
+            git commit -m "Auto-Sync: Pipeline state update [skip ci]"
+            git push origin main
+          fi
