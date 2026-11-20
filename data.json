@@ -1,30 +1,30 @@
 {
-  "timestamp": 1795132883,
+  "timestamp": 1795185412,
   "status": "operational",
   "rates": {
     "bitcoin": {
-      "usd": 61916,
-      "usd_24h_change": -1.5554169454066866
+      "usd": 61791,
+      "usd_24h_change": -3.3494390133123204
     },
     "ethereum": {
-      "usd": 1755.62,
-      "usd_24h_change": -0.9939940206706761
+      "usd": 1747.04,
+      "usd_24h_change": -3.5512894485632254
     },
     "litecoin": {
-      "usd": 42.27,
-      "usd_24h_change": -3.8451259445752637
+      "usd": 41.63,
+      "usd_24h_change": -6.3428972456037584
     },
     "dogecoin": {
-      "usd": 0.058127,
-      "usd_24h_change": -0.9020805829514879
+      "usd": 0.056432,
+      "usd_24h_change": -5.52079410108774
     },
     "tron": {
-      "usd": 0.310131,
-      "usd_24h_change": 0.21737615889916387
+      "usd": 0.305265,
+      "usd_24h_change": -2.194337022848516
     },
     "tether": {
-      "usd": 0.999047,
-      "usd_24h_change": -0.003384315117687118
+      "usd": 0.9992,
+      "usd_24h_change": 0.001324931571813301
     }
   },
   "verified_code": "VIPEDGE",
